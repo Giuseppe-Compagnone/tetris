@@ -2,11 +2,13 @@
 
 import appConfig from "@/appConfig";
 import { Board } from "@/Models/Board";
+import { Piece } from "@/Models/Piece";
 import { useEffect, useRef, useState } from "react";
 
 const MainCanvas = () => {
   //States
   const [board] = useState(new Board());
+  const [currentPiece, setCurrentPiece] = useState<Piece>(new Piece());
   console.log(board);
 
   //Hooks
@@ -24,17 +26,38 @@ const MainCanvas = () => {
     update();
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "ArrowLeft":
+          currentPiece.moveLeft();
+          break;
+        case "ArrowRight":
+          currentPiece.moveRight();
+          break;
+        case "ArrowDown":
+          currentPiece.update();
+          break;
+        default:
+          break;
+      }
+    });
+  }, []);
+
   //Methods
   const update = (timestamp?: number) => {
     if (!lastTime.current) lastTime.current = timestamp || 0;
 
     const dt = (timestamp || 0) - lastTime.current;
 
-    if (dt > 1000) {
+    if (dt > 600) {
       if (canvas.current) {
         const ctx = canvas.current.getContext("2d");
         if (ctx) {
           drawBackgroud(ctx);
+
+          currentPiece.draw(ctx);
+          currentPiece.update();
         }
       }
 
