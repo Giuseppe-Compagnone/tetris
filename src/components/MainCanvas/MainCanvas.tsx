@@ -78,10 +78,16 @@ const MainCanvas = () => {
         const pieceCollide = board.pieceCollide(currentPiece.current);
 
         if (pieceCollide) {
-          currentPiece.current.y--;
-          board.merge(currentPiece.current);
-          currentPiece.current = new Piece();
+          if (currentPiece.current.direction) {
+            currentPiece.current.undoMove();
+          } else {
+            currentPiece.current.y--;
+            board.merge(currentPiece.current);
+            currentPiece.current = new Piece();
+          }
         }
+
+        currentPiece.current.direction = 0;
 
         currentPiece.current.draw(ctx);
         board.draw(ctx);

@@ -3,7 +3,7 @@ import PiecesConfigurations from "./../utils/PiecesConfigurations.json";
 
 export class Piece {
   private _matrix: Matrix;
-  private direction: number;
+  public direction: number;
   public color: string;
   public x: number;
   public y: number;
@@ -83,8 +83,6 @@ export class Piece {
         }
       });
     });
-
-    this.direction = 0;
 
     return collide;
   };
