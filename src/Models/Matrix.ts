@@ -1,5 +1,5 @@
 export class Matrix {
-  private matrix: number[][];
+  private matrix: Array<Array<number | string>>;
   private rows: number;
   private cols: number;
 
@@ -9,7 +9,7 @@ export class Matrix {
     this.matrix = new Array(rows).fill(0).map(() => new Array(cols).fill(0));
   }
 
-  public getMatrix(): number[][] {
+  public getMatrix(): Array<Array<number | string>> {
     return this.matrix;
   }
 
@@ -21,7 +21,7 @@ export class Matrix {
     return this.cols;
   }
 
-  public setMatrix(matrix: number[][]): void {
+  public setMatrix(matrix: Array<Array<number | string>>): void {
     this.matrix = matrix;
   }
 
@@ -33,11 +33,11 @@ export class Matrix {
     this.cols = cols;
   }
 
-  public get(row: number, col: number): number {
+  public get(row: number, col: number): number | string {
     return this.matrix[row][col];
   }
 
-  public set(row: number, col: number, value: number): void {
+  public set(row: number, col: number, value: number | string): void {
     this.matrix[row][col] = value;
   }
 

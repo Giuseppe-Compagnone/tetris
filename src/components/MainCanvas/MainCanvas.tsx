@@ -8,11 +8,13 @@ import { useEffect, useRef, useState } from "react";
 const MainCanvas = () => {
   //States
   const [board] = useState(new Board());
-  const [currentPiece, setCurrentPiece] = useState<Piece>(new Piece());
-  console.log(board);
+  //   const [currentPiece, setCurrentPiece] = useState<Piece>(new Piece());
+  const dropInterval = 600;
 
   //Hooks
   const canvas = useRef<HTMLCanvasElement>(null);
+  const currentPiece = useRef<Piece>(new Piece());
+  const lastDropCounter = useRef(0);
   const lastTime = useRef(0);
 
   //Effects
@@ -30,13 +32,13 @@ const MainCanvas = () => {
     window.addEventListener("keydown", (e) => {
       switch (e.key) {
         case "ArrowLeft":
-          currentPiece.moveLeft();
+          currentPiece.current.moveLeft();
           break;
         case "ArrowRight":
-          currentPiece.moveRight();
+          currentPiece.current.moveRight();
           break;
         case "ArrowDown":
-          currentPiece.update();
+          currentPiece.current.update();
           break;
         default:
           break;
@@ -45,24 +47,33 @@ const MainCanvas = () => {
   }, []);
 
   //Methods
-  const update = (timestamp?: number) => {
-    if (!lastTime.current) lastTime.current = timestamp || 0;
+  const update = (timestamp: number = 0) => {
+    const dt = timestamp - lastTime.current;
+    lastDropCounter.current += dt;
 
-    const dt = (timestamp || 0) - lastTime.current;
-
-    if (dt > 600) {
-      if (canvas.current) {
-        const ctx = canvas.current.getContext("2d");
-        if (ctx) {
-          drawBackgroud(ctx);
-
-          currentPiece.draw(ctx);
-          currentPiece.update();
+    if (canvas.current) {
+      const ctx = canvas.current.getContext("2d");
+      if (ctx) {
+        if (lastDropCounter.current > dropInterval) {
+          lastDropCounter.current -= dropInterval;
+          currentPiece.current.update();
         }
-      }
 
-      lastTime.current = timestamp || 0;
+        drawBackgroud(ctx);
+
+        const bottomCollide = currentPiece.current.collideBottom();
+        if (bottomCollide) {
+          currentPiece.current.y--;
+          board.merge(currentPiece.current);
+          currentPiece.current = new Piece();
+        }
+
+        currentPiece.current.draw(ctx);
+        board.draw(ctx);
+      }
     }
+
+    lastTime.current = timestamp;
 
     requestAnimationFrame(update);
   };
