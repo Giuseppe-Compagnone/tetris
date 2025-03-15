@@ -90,4 +90,8 @@ export class Piece {
   public undoMove = (): void => {
     this.x -= this.direction;
   };
+
+  public rotate = (): void => {
+    this._matrix.rotate();
+  };
 }

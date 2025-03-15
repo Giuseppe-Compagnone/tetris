@@ -78,4 +78,17 @@ export class Matrix {
   public isRowEmpty(row: number): boolean {
     return this.matrix[row].every((cell) => cell === 0);
   }
+
+  public rotate(): void {
+    const newMatrix = new Array(this.cols)
+      .fill(0)
+      .map(() => new Array(this.rows).fill(0));
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        newMatrix[j][this.rows - i - 1] = this.matrix[i][j];
+      }
+    }
+    this.matrix = newMatrix;
+    [this.rows, this.cols] = [this.cols, this.rows];
+  }
 }

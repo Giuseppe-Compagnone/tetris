@@ -40,6 +40,9 @@ const MainCanvas = () => {
         case "ArrowDown":
           currentPiece.current.update();
           break;
+        case "ArrowUp":
+          currentPiece.current.rotate();
+          break;
         default:
           break;
       }
