@@ -61,8 +61,23 @@ const MainCanvas = () => {
 
         drawBackgroud(ctx);
 
+        const collide = currentPiece.current.collideBorders();
+
+        if (collide) {
+          currentPiece.current.undoMove();
+        }
+
         const bottomCollide = currentPiece.current.collideBottom();
+
         if (bottomCollide) {
+          currentPiece.current.y--;
+          board.merge(currentPiece.current);
+          currentPiece.current = new Piece();
+        }
+
+        const pieceCollide = board.pieceCollide(currentPiece.current);
+
+        if (pieceCollide) {
           currentPiece.current.y--;
           board.merge(currentPiece.current);
           currentPiece.current = new Piece();

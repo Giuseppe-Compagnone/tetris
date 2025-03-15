@@ -27,12 +27,6 @@ export class Piece {
   }
 
   public draw = (ctx: CanvasRenderingContext2D): void => {
-    const collide = this.collideBorders();
-
-    if (collide) {
-      this.x -= this.direction;
-    }
-
     this._matrix.getMatrix().forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
         if (cell !== 0) {
@@ -90,6 +84,12 @@ export class Piece {
       });
     });
 
+    this.direction = 0;
+
     return collide;
+  };
+
+  public undoMove = (): void => {
+    this.x -= this.direction;
   };
 }

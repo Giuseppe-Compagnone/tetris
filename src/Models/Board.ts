@@ -29,4 +29,20 @@ export class Board {
       });
     });
   };
+
+  public pieceCollide = (piece: Piece): boolean => {
+    let collide = false;
+    piece.getMatrix.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell !== 0) {
+          const [x, y] = piece.getAbsolutePos(rowIndex, colIndex);
+          if (this._matrix.get(y, x) !== 0) {
+            collide = true;
+          }
+        }
+      });
+    });
+
+    return collide;
+  };
 }
