@@ -36,8 +36,10 @@ export class Board {
       row.forEach((cell, colIndex) => {
         if (cell !== 0) {
           const [x, y] = piece.getAbsolutePos(rowIndex, colIndex);
-          if (this._matrix.get(y, x) !== 0) {
-            collide = true;
+          if (y >= 0) {
+            if (this._matrix.get(y, x) !== 0) {
+              collide = true;
+            }
           }
         }
       });

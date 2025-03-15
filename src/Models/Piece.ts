@@ -9,8 +9,8 @@ export class Piece {
   public y: number;
 
   constructor() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 3;
+    this.y = -3;
     this._matrix = new Matrix(4, 4);
     this.direction = 0;
 
