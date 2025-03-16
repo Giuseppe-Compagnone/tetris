@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 const MainCanvas = () => {
   //States
   const [board] = useState(new Board());
-  //   const [currentPiece, setCurrentPiece] = useState<Piece>(new Piece());
   const dropInterval = 600;
 
   //Hooks
@@ -30,7 +29,21 @@ const MainCanvas = () => {
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
+      if (!currentPiece.current.enableControls) return;
       switch (e.key) {
+        case " ":
+          currentPiece.current.enableControls = false;
+          currentPiece.current.x = board.projection.x;
+          for (
+            let i = 0;
+            i < board.projection.y - currentPiece.current.y;
+            i++
+          ) {
+            setTimeout(() => {
+              currentPiece.current.update();
+            }, 5 * (i + 1));
+          }
+          break;
         case "ArrowLeft":
           currentPiece.current.moveLeft();
           break;
@@ -42,6 +55,13 @@ const MainCanvas = () => {
           break;
         case "ArrowUp":
           currentPiece.current.rotate();
+          currentPiece.current.adjustRotate();
+          const pieceCollide = board.pieceCollide(currentPiece.current);
+          if (pieceCollide) {
+            currentPiece.current.rotate();
+            currentPiece.current.rotate();
+            currentPiece.current.rotate();
+          }
           break;
         default:
           break;
@@ -64,35 +84,12 @@ const MainCanvas = () => {
 
         drawBackgroud(ctx);
 
-        const collide = currentPiece.current.collideBorders();
-
-        if (collide) {
-          currentPiece.current.undoMove();
-        }
-
-        const bottomCollide = currentPiece.current.collideBottom();
-
-        if (bottomCollide) {
-          currentPiece.current.y--;
-          board.merge(currentPiece.current);
-          currentPiece.current = new Piece();
-        }
-
-        const pieceCollide = board.pieceCollide(currentPiece.current);
-
-        if (pieceCollide) {
-          if (currentPiece.current.direction) {
-            currentPiece.current.undoMove();
-          } else {
-            currentPiece.current.y--;
-            board.merge(currentPiece.current);
-            currentPiece.current = new Piece();
-          }
-        }
+        checkCollision();
 
         currentPiece.current.direction = 0;
 
         currentPiece.current.draw(ctx);
+        board.drawProjection(currentPiece.current, ctx);
         board.draw(ctx);
       }
     }
@@ -111,6 +108,34 @@ const MainCanvas = () => {
       }
 
       ctx.fillRect(i, 0, 1, canvas.current!.height / appConfig.scaleFactor);
+    }
+  };
+
+  const checkCollision = () => {
+    const collide = currentPiece.current.collideBorders();
+
+    if (collide) {
+      currentPiece.current.undoMove();
+    }
+
+    const bottomCollide = currentPiece.current.collideBottom();
+
+    if (bottomCollide) {
+      currentPiece.current.y--;
+      board.merge(currentPiece.current);
+      currentPiece.current = new Piece();
+    }
+
+    const pieceCollide = board.pieceCollide(currentPiece.current);
+
+    if (pieceCollide) {
+      if (currentPiece.current.direction) {
+        currentPiece.current.undoMove();
+      } else {
+        currentPiece.current.y--;
+        board.merge(currentPiece.current);
+        currentPiece.current = new Piece();
+      }
     }
   };
 

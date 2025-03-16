@@ -1,11 +1,12 @@
 import { Matrix } from "./Matrix";
 import { Piece } from "./Piece";
-
 export class Board {
   private _matrix: Matrix;
+  public projection: Piece;
 
   constructor() {
     this._matrix = new Matrix(20, 10);
+    this.projection = new Piece();
   }
 
   public merge = (piece: Piece): void => {
@@ -17,6 +18,8 @@ export class Board {
         }
       }
     }
+
+    this.clearRows();
   };
 
   public draw = (ctx: CanvasRenderingContext2D): void => {
@@ -25,6 +28,41 @@ export class Board {
         if (cell !== 0) {
           ctx.fillStyle = cell as string;
           ctx.fillRect(colIndex, rowIndex, 1, 1);
+        }
+      });
+    });
+  };
+
+  public drawProjection = (
+    piece: Piece,
+    ctx: CanvasRenderingContext2D
+  ): void => {
+    const clone: Piece = new Piece();
+    clone.setMatrix = piece.getMatrix;
+    clone.x = piece.x;
+    clone.y = piece.y;
+    clone.color = piece.color;
+
+    while (
+      !clone.collideBottom() &&
+      !this.pieceCollide(clone) &&
+      clone.y < 20
+    ) {
+      clone.y++;
+    }
+
+    clone.y--;
+
+    this.projection = clone;
+
+    clone.getMatrix.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell !== 0) {
+          const [x, y] = clone.getAbsolutePos(rowIndex, colIndex);
+          if (y < 20) {
+            ctx.fillStyle = clone.color + "4d";
+            ctx.fillRect(x, y, 1, 1);
+          }
         }
       });
     });
@@ -46,5 +84,13 @@ export class Board {
     });
 
     return collide;
+  };
+
+  public clearRows = (): void => {
+    this._matrix.getMatrix().forEach((row, rowIndex) => {
+      if (row.every((cell) => cell !== 0)) {
+        this._matrix.clearRow(rowIndex);
+      }
+    });
   };
 }

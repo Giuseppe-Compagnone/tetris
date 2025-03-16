@@ -7,12 +7,14 @@ export class Piece {
   public color: string;
   public x: number;
   public y: number;
+  public enableControls: boolean;
 
   constructor() {
     this.x = 3;
     this.y = -3;
     this._matrix = new Matrix(4, 4);
     this.direction = 0;
+    this.enableControls = true;
 
     const configuration =
       PiecesConfigurations[
@@ -24,6 +26,10 @@ export class Piece {
 
   public get getMatrix(): Array<Array<number | string>> {
     return this._matrix.getMatrix();
+  }
+
+  public set setMatrix(m: Array<Array<number | string>>) {
+    this._matrix.setMatrix(m);
   }
 
   public draw = (ctx: CanvasRenderingContext2D): void => {
@@ -93,5 +99,26 @@ export class Piece {
 
   public rotate = (): void => {
     this._matrix.rotate();
+  };
+
+  public adjustRotate = (): void => {
+    this._matrix.getMatrix().forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell !== 0) {
+          const [x, y] = this.getAbsolutePos(rowIndex, colIndex);
+          if (x < 0) {
+            this.x = 0;
+          }
+          if (x >= 10) {
+            this.x = 10 - 4;
+          }
+          if (y > 20) {
+            this.rotate();
+            this.rotate();
+            this.rotate();
+          }
+        }
+      });
+    });
   };
 }
