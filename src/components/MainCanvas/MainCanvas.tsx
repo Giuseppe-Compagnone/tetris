@@ -1,20 +1,24 @@
 "use client";
 
 import appConfig from "@/appConfig";
-import { Board } from "@/Models/Board";
 import { Piece } from "@/Models/Piece";
+import { useTetrisGameService } from "@/services";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 
 const MainCanvas = () => {
   //States
-  const [board] = useState(new Board());
-  const dropInterval = 600;
+  const [dropInterval, setDropInterval] = useState<number>(
+    Math.max(48 - 5 * 0, 1) * (1000 / 60)
+  );
 
   //Hooks
   const canvas = useRef<HTMLCanvasElement>(null);
   const currentPiece = useRef<Piece>(new Piece());
   const lastDropCounter = useRef(0);
   const lastTime = useRef(0);
+  const { board, level, setLines, pause, setPause } = useTetrisGameService();
 
   //Effects
   useEffect(() => {
@@ -22,13 +26,19 @@ const MainCanvas = () => {
       const ctx = canvas.current.getContext("2d");
       if (ctx) {
         ctx.scale(appConfig.scaleFactor, appConfig.scaleFactor);
+        drawBackgroud(ctx);
       }
     }
-    update();
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => {
+    if (!pause) {
+      update();
+    }
+  }, [pause]);
+
+  useEffect(() => {
+    const handelKeyDown = (e: KeyboardEvent) => {
       if (!currentPiece.current.enableControls) return;
       switch (e.key) {
         case " ":
@@ -66,11 +76,22 @@ const MainCanvas = () => {
         default:
           break;
       }
-    });
-  }, []);
+    };
+    if (!pause) window.addEventListener("keydown", handelKeyDown);
+    else window.removeEventListener("keydown", handelKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handelKeyDown);
+    };
+  }, [pause]);
+
+  useEffect(() => {
+    setDropInterval(Math.max(48 - 5 * level, 1) * (1000 / 60));
+  }, [level]);
 
   //Methods
   const update = (timestamp: number = 0) => {
+    if (pause) return;
     const dt = timestamp - lastTime.current;
     lastDropCounter.current += dt;
 
@@ -120,9 +141,12 @@ const MainCanvas = () => {
 
     const bottomCollide = currentPiece.current.collideBottom();
 
+    let lines = 0;
+
     if (bottomCollide) {
       currentPiece.current.y--;
       board.merge(currentPiece.current);
+      lines = board.clearRows();
       currentPiece.current = new Piece();
     }
 
@@ -134,18 +158,33 @@ const MainCanvas = () => {
       } else {
         currentPiece.current.y--;
         board.merge(currentPiece.current);
+        lines = board.clearRows();
         currentPiece.current = new Piece();
       }
     }
+
+    setLines((prev: number) => prev + lines);
   };
 
   return (
-    <canvas
-      className="main-canvas"
-      width={appConfig.scaleFactor * 10}
-      height={appConfig.scaleFactor * 20}
-      ref={canvas}
-    />
+    <div className="main-canvas">
+      {pause && (
+        <div
+          className="pause"
+          onClick={() => {
+            setPause(false);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlay} />
+        </div>
+      )}
+      <canvas
+        className="canvas"
+        width={appConfig.scaleFactor * 10}
+        height={appConfig.scaleFactor * 20}
+        ref={canvas}
+      />
+    </div>
   );
 };
 

@@ -18,8 +18,6 @@ export class Board {
         }
       }
     }
-
-    this.clearRows();
   };
 
   public draw = (ctx: CanvasRenderingContext2D): void => {
@@ -86,11 +84,16 @@ export class Board {
     return collide;
   };
 
-  public clearRows = (): void => {
+  public clearRows = (): number => {
+    let lines = 0;
+
     this._matrix.getMatrix().forEach((row, rowIndex) => {
       if (row.every((cell) => cell !== 0)) {
         this._matrix.clearRow(rowIndex);
+        lines++;
       }
     });
+
+    return lines;
   };
 }
