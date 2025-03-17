@@ -39,12 +39,12 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
 
   //Methods
   const restartGame = () => {
+    setBoard(new Board());
     level.current = 0;
     lines.current = 0;
     setScore(0);
     setGameOver(false);
     setPause(false);
-    setBoard(new Board());
     setTime(0);
   };
 

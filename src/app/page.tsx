@@ -3,11 +3,21 @@
 import { Box, MainCanvas } from "@/components";
 import { useTetrisGameService } from "@/services";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import {
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight,
+  faArrowUp,
+  faPause,
+  faPlay,
+  faRefresh,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const HomePage = () => {
   //Hooks
-  const { score, level, lines, time } = useTetrisGameService();
+  const { score, level, lines, time, restartGame, setPause, pause } =
+    useTetrisGameService();
 
   //Methods
   const formatTime = (seconds: number): string => {
@@ -28,6 +38,26 @@ const HomePage = () => {
           <Box title="Next Piece">
             <div className=""></div>
           </Box>
+          <Box title="Options">
+            <div className="options">
+              <div className="key">
+                <FontAwesomeIcon
+                  icon={pause ? faPlay : faPause}
+                  onClick={() => {
+                    setPause(!pause);
+                  }}
+                />
+              </div>
+              <div className="key">
+                <FontAwesomeIcon
+                  icon={faRefresh}
+                  onClick={() => {
+                    restartGame();
+                  }}
+                />
+              </div>
+            </div>
+          </Box>
           <Box title="Statistics">
             <div className="sub-title">Score</div>
             <div className="value">{score}</div>
@@ -40,6 +70,38 @@ const HomePage = () => {
         <MainCanvas />
         <div className="right-col">
           <Box title="Time">{formatTime(time)}</Box>
+          <Box title="Commands">
+            <div className="command">
+              <div className="key">
+                <FontAwesomeIcon icon={faArrowRight} />
+              </div>{" "}
+              Move Right
+            </div>
+            <div className="command">
+              <div className="key">
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </div>{" "}
+              Move Left
+            </div>
+            <div className="command">
+              <div className="key">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </div>{" "}
+              Move Down Faster
+            </div>
+            <div className="command">
+              <div className="key">
+                <FontAwesomeIcon icon={faArrowUp} />
+              </div>{" "}
+              Rotate
+            </div>
+            <div className="command">
+              <div className="space-bar">SPACE</div> Istant Drop
+            </div>
+            <div className="command">
+              <div className="key">P</div> Pause
+            </div>
+          </Box>
           <p className="credits">
             Made by <br />
             <a href="https://github.com/Giuseppe-Compagnone" target="_blank">
