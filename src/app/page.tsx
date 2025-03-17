@@ -14,7 +14,7 @@ const HomePage = () => {
           <Box title="Next Piece">
             <div className=""></div>
           </Box>
-          <Box title="Statics">
+          <Box title="Statistics">
             <div className="sub-title">Score</div>
             <div className="value">{score}</div>
             <div className="sub-title">Level</div>

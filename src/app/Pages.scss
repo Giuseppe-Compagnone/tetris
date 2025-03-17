@@ -21,6 +21,17 @@
       align-items: center;
       aspect-ratio: 1/2;
       height: 100%;
+
+      .sub-title {
+        &:not(:first-child) {
+          margin-top: 15px;
+        }
+      }
+
+      .value {
+        font-size: 1.2rem;
+        margin-top: 5px;
+      }
     }
   }
 }
