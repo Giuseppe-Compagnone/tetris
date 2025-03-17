@@ -1,6 +1,7 @@
 "use client";
 
 import { Board } from "@/Models/Board";
+import { Piece } from "@/Models/Piece";
 import { createContext, Dispatch, RefObject, SetStateAction } from "react";
 
 export interface TetrisGameServiceContent {
@@ -16,6 +17,7 @@ export interface TetrisGameServiceContent {
   restartGame: () => void;
   addLines: (lines: number) => void;
   time: number;
+  currentPiece: RefObject<Piece>;
 }
 
 export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
@@ -32,5 +34,6 @@ export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
     restartGame: () => {},
     addLines: () => {},
     time: 0,
+    currentPiece: { current: new Piece() },
   }
 );

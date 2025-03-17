@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { TetrisGameServiceProviderProps } from "./TetrisGameService.types";
 import { TetrisGameServiceContext } from "./TetrisGameServiceContext";
 import { Board } from "@/Models/Board";
+import { Piece } from "@/Models/Piece";
 
 const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   //States
@@ -16,6 +17,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   //Hooks
   const lines = useRef<number>(0);
   const level = useRef<number>(0);
+  const currentPiece = useRef<Piece>(new Piece());
 
   //Effects
   useEffect(() => {
@@ -40,6 +42,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   //Methods
   const restartGame = () => {
     setBoard(new Board());
+    currentPiece.current = new Piece();
     level.current = 0;
     lines.current = 0;
     setScore(0);
@@ -87,6 +90,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         restartGame,
         addLines,
         time,
+        currentPiece,
       }}
     >
       {props.children}

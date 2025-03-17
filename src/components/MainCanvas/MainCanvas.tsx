@@ -1,6 +1,7 @@
 "use client";
 
 import appConfig from "@/appConfig";
+import { Board } from "@/Models/Board";
 import { Piece } from "@/Models/Piece";
 import { useTetrisGameService } from "@/services";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +16,6 @@ const MainCanvas = () => {
 
   //Hooks
   const canvas = useRef<HTMLCanvasElement>(null);
-  const currentPiece = useRef<Piece>(new Piece());
   const lastDropCounter = useRef<number>(0);
   const lastTime = useRef<number>(0);
   const isPaused = useRef<boolean>(false);
@@ -28,7 +28,9 @@ const MainCanvas = () => {
     setGameOver,
     gameOver,
     restartGame,
+    currentPiece,
   } = useTetrisGameService();
+  const boardRef = useRef<Board>(board);
 
   //Effects
   useEffect(() => {
@@ -51,6 +53,10 @@ const MainCanvas = () => {
   }, [pause]);
 
   useEffect(() => {
+    boardRef.current = board;
+  }, [board]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!currentPiece.current.enableControls) return;
       switch (e.key) {
@@ -60,10 +66,10 @@ const MainCanvas = () => {
           break;
         case " ":
           currentPiece.current.enableControls = false;
-          currentPiece.current.x = board.projection.x;
+          currentPiece.current.x = boardRef.current.projection.x;
           for (
             let i = 0;
-            i < board.projection.y - currentPiece.current.y;
+            i < boardRef.current.projection.y - currentPiece.current.y;
             i++
           ) {
             setTimeout(() => {
@@ -83,7 +89,9 @@ const MainCanvas = () => {
         case "ArrowUp":
           currentPiece.current.rotate();
           currentPiece.current.adjustRotate();
-          const pieceCollide = board.pieceCollide(currentPiece.current);
+          const pieceCollide = boardRef.current.pieceCollide(
+            currentPiece.current
+          );
           if (pieceCollide) {
             currentPiece.current.rotate();
             currentPiece.current.rotate();
@@ -94,6 +102,7 @@ const MainCanvas = () => {
           break;
       }
     };
+
     const handlePauseKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
         case "p":
@@ -146,8 +155,8 @@ const MainCanvas = () => {
         currentPiece.current.direction = 0;
 
         currentPiece.current.draw(ctx);
-        board.drawProjection(currentPiece.current, ctx);
-        board.draw(ctx);
+        boardRef.current.drawProjection(currentPiece.current, ctx);
+        boardRef.current.draw(ctx);
       }
     }
 
@@ -182,17 +191,17 @@ const MainCanvas = () => {
     if (bottomCollide) {
       currentPiece.current.y--;
       try {
-        board.merge(currentPiece.current);
+        boardRef.current.merge(currentPiece.current);
       } catch (e) {
         console.log(e);
         setGameOver(true);
         setPause(true);
       }
-      lines = board.clearRows();
+      lines = boardRef.current.clearRows();
       currentPiece.current = new Piece();
     }
 
-    const pieceCollide = board.pieceCollide(currentPiece.current);
+    const pieceCollide = boardRef.current.pieceCollide(currentPiece.current);
 
     if (pieceCollide) {
       if (currentPiece.current.direction) {
@@ -200,13 +209,13 @@ const MainCanvas = () => {
       } else {
         currentPiece.current.y--;
         try {
-          board.merge(currentPiece.current);
+          boardRef.current.merge(currentPiece.current);
         } catch (e) {
           console.log(e);
           setGameOver(true);
           setPause(true);
         }
-        lines = board.clearRows();
+        lines = boardRef.current.clearRows();
         currentPiece.current = new Piece();
       }
     }

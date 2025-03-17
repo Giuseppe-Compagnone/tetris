@@ -40,21 +40,21 @@ const HomePage = () => {
           </Box>
           <Box title="Options">
             <div className="options">
-              <div className="key">
-                <FontAwesomeIcon
-                  icon={pause ? faPlay : faPause}
-                  onClick={() => {
-                    setPause(!pause);
-                  }}
-                />
+              <div
+                className="key"
+                onClick={() => {
+                  setPause(!pause);
+                }}
+              >
+                <FontAwesomeIcon icon={pause ? faPlay : faPause} />
               </div>
-              <div className="key">
-                <FontAwesomeIcon
-                  icon={faRefresh}
-                  onClick={() => {
-                    restartGame();
-                  }}
-                />
+              <div
+                className="key"
+                onClick={() => {
+                  restartGame();
+                }}
+              >
+                <FontAwesomeIcon icon={faRefresh} />
               </div>
             </div>
           </Box>
