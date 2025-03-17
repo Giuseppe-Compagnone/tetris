@@ -23,6 +23,9 @@
       height: 100%;
 
       .sub-title {
+        width: 100%;
+        opacity: 0.8;
+
         &:not(:first-child) {
           margin-top: 15px;
         }
@@ -30,7 +33,8 @@
 
       .value {
         font-size: 1.2rem;
-        margin-top: 5px;
+        margin-top: 10px;
+        width: 100%;
       }
     }
   }

@@ -14,6 +14,7 @@ export class Board {
       for (let j = 0; j < 4; j++) {
         if (piece.getMatrix[i][j] !== 0) {
           const pos = piece.getAbsolutePos(i, j);
+          if (pos[1] < 0) throw new Error("Game Over");
           this._matrix.set(pos[1], pos[0], piece.color);
         }
       }

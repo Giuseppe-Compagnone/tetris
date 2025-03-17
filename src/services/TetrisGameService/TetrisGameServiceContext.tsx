@@ -15,6 +15,7 @@ export interface TetrisGameServiceContent {
   board: Board;
   restartGame: () => void;
   addLines: (lines: number) => void;
+  time: number;
 }
 
 export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
@@ -30,5 +31,6 @@ export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
     board: new Board(),
     restartGame: () => {},
     addLines: () => {},
+    time: 0,
   }
 );

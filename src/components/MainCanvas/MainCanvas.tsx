@@ -16,9 +16,11 @@ const MainCanvas = () => {
   //Hooks
   const canvas = useRef<HTMLCanvasElement>(null);
   const currentPiece = useRef<Piece>(new Piece());
-  const lastDropCounter = useRef(0);
-  const lastTime = useRef(0);
-  const { board, level, addLines, pause, setPause } = useTetrisGameService();
+  const lastDropCounter = useRef<number>(0);
+  const lastTime = useRef<number>(0);
+  const isPaused = useRef<boolean>(false);
+  const { board, level, addLines, pause, setPause, setGameOver } =
+    useTetrisGameService();
 
   //Effects
   useEffect(() => {
@@ -33,14 +35,21 @@ const MainCanvas = () => {
 
   useEffect(() => {
     if (!pause) {
+      isPaused.current = false;
       update();
+    } else {
+      isPaused.current = true;
     }
   }, [pause]);
 
   useEffect(() => {
-    const handelKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (!currentPiece.current.enableControls) return;
       switch (e.key) {
+        case "p":
+        case "P":
+          setPause(true);
+          break;
         case " ":
           currentPiece.current.enableControls = false;
           currentPiece.current.x = board.projection.x;
@@ -77,11 +86,27 @@ const MainCanvas = () => {
           break;
       }
     };
-    if (!pause) window.addEventListener("keydown", handelKeyDown);
-    else window.removeEventListener("keydown", handelKeyDown);
+    const handlePauseKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "p":
+        case "P":
+          setPause(false);
+          break;
+        default:
+          break;
+      }
+    };
+
+    if (!pause) {
+      window.removeEventListener("keydown", handlePauseKeyDown);
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.addEventListener("keydown", handlePauseKeyDown);
+    }
 
     return () => {
-      window.removeEventListener("keydown", handelKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [pause]);
 
@@ -91,7 +116,7 @@ const MainCanvas = () => {
 
   //Methods
   const update = (timestamp: number = 0) => {
-    if (pause) return;
+    if (isPaused.current) return;
     const dt = timestamp - lastTime.current;
     lastDropCounter.current += dt;
 
@@ -148,7 +173,13 @@ const MainCanvas = () => {
 
     if (bottomCollide) {
       currentPiece.current.y--;
-      board.merge(currentPiece.current);
+      try {
+        board.merge(currentPiece.current);
+      } catch (e) {
+        console.log(e);
+        setGameOver(true);
+        setPause(true);
+      }
       lines = board.clearRows();
       currentPiece.current = new Piece();
     }
@@ -160,7 +191,13 @@ const MainCanvas = () => {
         currentPiece.current.undoMove();
       } else {
         currentPiece.current.y--;
-        board.merge(currentPiece.current);
+        try {
+          board.merge(currentPiece.current);
+        } catch (e) {
+          console.log(e);
+          setGameOver(true);
+          setPause(true);
+        }
         lines = board.clearRows();
         currentPiece.current = new Piece();
       }

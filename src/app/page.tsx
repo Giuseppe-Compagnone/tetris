@@ -5,7 +5,19 @@ import { useTetrisGameService } from "@/services";
 
 const HomePage = () => {
   //Hooks
-  const { score, level, lines } = useTetrisGameService();
+  const { score, level, lines, time } = useTetrisGameService();
+
+  //Methods
+  const formatTime = (seconds: number): string => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    const minutes = String(m).padStart(2, "0");
+    const secondsStr = String(s).padStart(2, "0");
+
+    return h > 0 ? `${h}:${minutes}:${secondsStr}` : `${minutes}:${secondsStr}`;
+  };
 
   return (
     <div className="home-page">
@@ -25,9 +37,7 @@ const HomePage = () => {
         </div>
         <MainCanvas />
         <div className="right-col">
-          <Box title="Time">
-            <div className=""></div>
-          </Box>
+          <Box title="Time">{formatTime(time)}</Box>
         </div>
       </div>
     </div>

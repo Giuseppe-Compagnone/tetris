@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TetrisGameServiceProviderProps } from "./TetrisGameService.types";
 import { TetrisGameServiceContext } from "./TetrisGameServiceContext";
 import { Board } from "@/Models/Board";
@@ -11,10 +11,31 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [pause, setPause] = useState<boolean>(true);
   const [board, setBoard] = useState<Board>(new Board());
+  const [time, setTime] = useState<number>(0);
 
   //Hooks
   const lines = useRef<number>(0);
   const level = useRef<number>(0);
+
+  //Effects
+  useEffect(() => {
+    let timer: NodeJS.Timer;
+    if (pause) {
+      // @ts-expect-error not assigned
+      clearInterval(timer);
+    } else {
+      timer = setInterval(() => {
+        if (!pause) {
+          setTime((prev) => prev + 1);
+        }
+      }, 1000);
+    }
+
+    return () => {
+      // @ts-expect-error not assigned
+      clearInterval(timer);
+    };
+  }, [pause]);
 
   //Methods
   const restartGame = () => {
@@ -24,6 +45,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
     setGameOver(false);
     setPause(false);
     setBoard(new Board());
+    setTime(0);
   };
 
   const addLines = (newLines: number) => {
@@ -47,8 +69,6 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
       newScore += 40 * (newLevel + 1);
     }
 
-    console.log(newScore, newLevel + 1);
-
     setScore((prev) => prev + newScore);
   };
 
@@ -66,6 +86,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         board,
         restartGame,
         addLines,
+        time,
       }}
     >
       {props.children}
