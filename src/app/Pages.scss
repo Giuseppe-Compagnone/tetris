@@ -36,6 +36,29 @@
         margin-top: 10px;
         width: 100%;
       }
+
+      .credits {
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          transition: all 0.2s ease-in-out;
+
+          svg {
+            font-size: 1.5rem;
+            color: unset;
+
+            path {
+              color: unset;
+            }
+          }
+
+          &:hover {
+            color: #8b3cad;
+          }
+        }
+      }
     }
   }
 }

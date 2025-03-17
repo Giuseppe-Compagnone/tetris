@@ -19,8 +19,16 @@ const MainCanvas = () => {
   const lastDropCounter = useRef<number>(0);
   const lastTime = useRef<number>(0);
   const isPaused = useRef<boolean>(false);
-  const { board, level, addLines, pause, setPause, setGameOver } =
-    useTetrisGameService();
+  const {
+    board,
+    level,
+    addLines,
+    pause,
+    setPause,
+    setGameOver,
+    gameOver,
+    restartGame,
+  } = useTetrisGameService();
 
   //Effects
   useEffect(() => {
@@ -208,7 +216,7 @@ const MainCanvas = () => {
 
   return (
     <div className="main-canvas">
-      {pause && (
+      {pause && !gameOver && (
         <div
           className="pause"
           onClick={() => {
@@ -216,6 +224,17 @@ const MainCanvas = () => {
           }}
         >
           <FontAwesomeIcon icon={faPlay} />
+        </div>
+      )}
+      {gameOver && (
+        <div
+          className="game-over"
+          onClick={() => {
+            restartGame();
+          }}
+        >
+          <h1>GAME OVER</h1>
+          <p>click to restart</p>
         </div>
       )}
       <canvas

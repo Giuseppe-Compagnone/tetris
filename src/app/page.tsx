@@ -2,6 +2,8 @@
 
 import { Box, MainCanvas } from "@/components";
 import { useTetrisGameService } from "@/services";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const HomePage = () => {
   //Hooks
@@ -38,6 +40,12 @@ const HomePage = () => {
         <MainCanvas />
         <div className="right-col">
           <Box title="Time">{formatTime(time)}</Box>
+          <p className="credits">
+            Made by <br />
+            <a href="https://github.com/Giuseppe-Compagnone" target="_blank">
+              Giuseppe Compagnone <FontAwesomeIcon icon={faGithub} />
+            </a>
+          </p>
         </div>
       </div>
     </div>
