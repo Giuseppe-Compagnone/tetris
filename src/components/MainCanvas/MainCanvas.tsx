@@ -18,7 +18,7 @@ const MainCanvas = () => {
   const currentPiece = useRef<Piece>(new Piece());
   const lastDropCounter = useRef(0);
   const lastTime = useRef(0);
-  const { board, level, setLines, pause, setPause } = useTetrisGameService();
+  const { board, level, addLines, pause, setPause } = useTetrisGameService();
 
   //Effects
   useEffect(() => {
@@ -86,7 +86,7 @@ const MainCanvas = () => {
   }, [pause]);
 
   useEffect(() => {
-    setDropInterval(Math.max(48 - 5 * level, 1) * (1000 / 60));
+    setDropInterval(Math.max(48 - 5 * level.current, 1) * (1000 / 60));
   }, [level]);
 
   //Methods
@@ -98,7 +98,10 @@ const MainCanvas = () => {
     if (canvas.current) {
       const ctx = canvas.current.getContext("2d");
       if (ctx) {
-        if (lastDropCounter.current > dropInterval) {
+        if (lastDropCounter.current > dropInterval * 2) {
+          lastDropCounter.current = dropInterval;
+        }
+        if (lastDropCounter.current >= dropInterval) {
           lastDropCounter.current -= dropInterval;
           currentPiece.current.update();
         }
@@ -163,7 +166,7 @@ const MainCanvas = () => {
       }
     }
 
-    setLines((prev: number) => prev + lines);
+    addLines(lines);
   };
 
   return (

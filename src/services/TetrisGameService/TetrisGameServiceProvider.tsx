@@ -1,63 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { TetrisGameServiceProviderProps } from "./TetrisGameService.types";
 import { TetrisGameServiceContext } from "./TetrisGameServiceContext";
 import { Board } from "@/Models/Board";
 
 const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   //States
-  const [level, setLevel] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
-  const [lines, setLines] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [pause, setPause] = useState<boolean>(true);
   const [board, setBoard] = useState<Board>(new Board());
 
-  //Effects
-  useEffect(() => {
-    const newLevel = Math.floor(lines / 10);
-    if (newLevel !== level) {
-      setLevel(newLevel);
-    }
-  }, [lines]);
+  //Hooks
+  const lines = useRef<number>(0);
+  const level = useRef<number>(0);
 
   //Methods
   const restartGame = () => {
-    setLevel(0);
+    level.current = 0;
+    lines.current = 0;
     setScore(0);
-    setLines(0);
     setGameOver(false);
     setPause(false);
     setBoard(new Board());
   };
 
-  const addLines = (lines: number) => {
-    setLines((prev) => prev + lines);
-    let score = 0;
+  const addLines = (newLines: number) => {
+    if (newLines <= 0) return;
 
-    if (lines % 4 === 0) {
-      score += 1200 * level;
-    } else if (lines % 3 === 0) {
-      score += 300 * level;
-    } else if (lines % 2 === 0) {
-      score += 100 * level;
+    lines.current += newLines;
+
+    const newLevel = Math.floor(lines.current / 10);
+    if (newLevel !== level.current) {
+      level.current = newLevel;
+    }
+    let newScore = 0;
+
+    if (lines.current % 4 === 0) {
+      newScore += 1200 * (newLevel + 1);
+    } else if (lines.current % 3 === 0) {
+      newScore += 300 * (newLevel + 1);
+    } else if (lines.current % 2 === 0) {
+      newScore += 100 * (newLevel + 1);
     } else {
-      score += 40 * level;
+      newScore += 40 * (newLevel + 1);
     }
 
-    setScore((prev) => prev + score);
+    console.log(newScore, newLevel + 1);
+
+    setScore((prev) => prev + newScore);
   };
 
   return (
     <TetrisGameServiceContext.Provider
       value={{
         level,
-        setLevel,
         score,
         setScore,
         lines,
-        setLines,
         gameOver,
         setGameOver,
         pause,

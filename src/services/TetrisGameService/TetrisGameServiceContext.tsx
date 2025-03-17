@@ -1,15 +1,13 @@
 "use client";
 
 import { Board } from "@/Models/Board";
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch, RefObject, SetStateAction } from "react";
 
 export interface TetrisGameServiceContent {
-  level: number;
-  setLevel: Dispatch<SetStateAction<number>>;
+  level: RefObject<number>;
   score: number;
   setScore: Dispatch<SetStateAction<number>>;
-  lines: number;
-  setLines: Dispatch<SetStateAction<number>>;
+  lines: RefObject<number>;
   gameOver: boolean;
   setGameOver: Dispatch<SetStateAction<boolean>>;
   pause: boolean;
@@ -21,12 +19,10 @@ export interface TetrisGameServiceContent {
 
 export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
   {
-    level: 0,
-    setLevel: () => {},
+    level: { current: 0 },
+    lines: { current: 0 },
     score: 0,
     setScore: () => {},
-    lines: 0,
-    setLines: () => {},
     gameOver: false,
     setGameOver: () => {},
     pause: false,
