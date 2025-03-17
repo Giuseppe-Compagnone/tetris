@@ -24,7 +24,11 @@ const HomePage = () => {
           </Box>
         </div>
         <MainCanvas />
-        <div className="right-col"></div>
+        <div className="right-col">
+          <Box title="Time">
+            <div className=""></div>
+          </Box>
+        </div>
       </div>
     </div>
   );
