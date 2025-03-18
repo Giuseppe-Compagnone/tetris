@@ -11,12 +11,15 @@ import {
   faPause,
   faPlay,
   faRefresh,
+  faVolumeHigh,
+  faVolumeLow,
+  faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const HomePage = () => {
   //Hooks
-  const { score, level, lines, time, restartGame, setPause, pause } =
+  const { score, level, lines, time, restartGame, setPause, pause, audio } =
     useTetrisGameService();
 
   //Methods
@@ -29,6 +32,24 @@ const HomePage = () => {
     const secondsStr = String(s).padStart(2, "0");
 
     return h > 0 ? `${h}:${minutes}:${secondsStr}` : `${minutes}:${secondsStr}`;
+  };
+
+  const setAudio = () => {
+    if (audio) {
+      switch (audio.volume) {
+        case 0:
+          audio.volume = 0.5;
+          break;
+        case 0.5:
+          audio.volume = 1;
+          break;
+        case 1:
+          audio.volume = 0;
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   return (
@@ -55,6 +76,22 @@ const HomePage = () => {
                 }}
               >
                 <FontAwesomeIcon icon={faRefresh} />
+              </div>
+              <div
+                className="key"
+                onClick={() => {
+                  setAudio();
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={
+                    audio?.volume === 1
+                      ? faVolumeHigh
+                      : audio?.volume === 0.5
+                      ? faVolumeLow
+                      : faVolumeXmark
+                  }
+                />
               </div>
             </div>
           </Box>

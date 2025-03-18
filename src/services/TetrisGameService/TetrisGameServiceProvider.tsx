@@ -13,6 +13,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const [pause, setPause] = useState<boolean>(true);
   const [board, setBoard] = useState<Board>(new Board());
   const [time, setTime] = useState<number>(0);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   //Hooks
   const lines = useRef<number>(0);
@@ -20,6 +21,24 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const currentPiece = useRef<Piece>(new Piece());
 
   //Effects
+  useEffect(() => {
+    const soundtrack = new Audio("./assets/soundtrack.mp3");
+    soundtrack.load();
+    soundtrack.loop = true;
+    soundtrack.volume = 1;
+    setAudio(soundtrack);
+  }, []);
+
+  useEffect(() => {
+    if (audio) {
+      if (pause) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+    }
+  }, [pause]);
+
   useEffect(() => {
     let timer: NodeJS.Timer;
     if (pause) {
@@ -41,6 +60,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
 
   //Methods
   const restartGame = () => {
+    if (audio) audio.currentTime = 0;
     setBoard(new Board());
     currentPiece.current = new Piece();
     level.current = 0;
@@ -91,6 +111,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         addLines,
         time,
         currentPiece,
+        audio,
       }}
     >
       {props.children}
