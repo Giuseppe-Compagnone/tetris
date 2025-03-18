@@ -107,10 +107,6 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const getNextPiece = () => {
     currentPiece.current = nextPiece.current;
     nextPiece.current = bag.getNextPiece();
-    console.table({
-      currentPiece: currentPiece.current,
-      nextPiece: nextPiece.current,
-    });
   };
 
   return (

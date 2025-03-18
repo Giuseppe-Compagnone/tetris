@@ -16,11 +16,13 @@ import {
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef } from "react";
 
 const HomePage = () => {
   //Hooks
   const { score, level, lines, time, restartGame, setPause, pause, audio } =
     useTetrisGameService();
+  const canvas = useRef<HTMLCanvasElement>(null);
 
   //Methods
   const formatTime = (seconds: number): string => {
@@ -57,7 +59,7 @@ const HomePage = () => {
       <div className="game">
         <div className="left-col">
           <Box title="Next Piece">
-            <div className=""></div>
+            <canvas className="next-piece" ref={canvas}></canvas>
           </Box>
           <Box title="Options">
             <div className="options">

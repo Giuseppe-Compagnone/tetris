@@ -12,8 +12,6 @@ export class Bag {
     configurations.forEach((_, i) => {
       this._pieces.push(new Piece(i));
     });
-
-    console.log("Fill", this._pieces);
   }
 
   public getNextPiece() {
@@ -24,8 +22,6 @@ export class Bag {
     const index = Math.floor(Math.random() * this._pieces.length);
 
     const piece = this._pieces.splice(index, 1)[0];
-
-    console.log("Extract", this._pieces);
 
     return piece;
   }
