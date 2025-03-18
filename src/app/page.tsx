@@ -16,13 +16,35 @@ import {
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const HomePage = () => {
   //Hooks
-  const { score, level, lines, time, restartGame, setPause, pause, audio } =
-    useTetrisGameService();
+  const {
+    score,
+    level,
+    lines,
+    time,
+    restartGame,
+    setPause,
+    pause,
+    audio,
+    nextPiece,
+    nextPieceFlag,
+  } = useTetrisGameService();
   const canvas = useRef<HTMLCanvasElement>(null);
+
+  //Effects
+  useEffect(() => {
+    drawNextPiece();
+  }, [nextPieceFlag]);
+
+  useEffect(() => {
+    if (!canvas.current) return;
+    const ctx = canvas.current.getContext("2d");
+    if (!ctx) return;
+    ctx.scale(40, 40);
+  }, []);
 
   //Methods
   const formatTime = (seconds: number): string => {
@@ -54,12 +76,33 @@ const HomePage = () => {
     }
   };
 
+  const drawNextPiece = () => {
+    if (!canvas.current) return;
+    const ctx = canvas.current.getContext("2d");
+    if (ctx) {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      nextPiece.current.getMatrix.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          if (cell !== 0) {
+            ctx.fillStyle = nextPiece.current.color;
+            ctx.fillRect(colIndex + 1, rowIndex + 1, 1, 1);
+          }
+        });
+      });
+    }
+  };
+
   return (
     <div className="home-page">
       <div className="game">
         <div className="left-col">
           <Box title="Next Piece">
-            <canvas className="next-piece" ref={canvas}></canvas>
+            <canvas
+              className="next-piece"
+              ref={canvas}
+              width={240}
+              height={240}
+            ></canvas>
           </Box>
           <Box title="Options">
             <div className="options">

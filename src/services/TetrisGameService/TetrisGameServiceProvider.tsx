@@ -16,6 +16,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const [time, setTime] = useState<number>(0);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [bag] = useState<Bag>(new Bag());
+  const [nextPieceFlag, setNextPieceFlag] = useState<number>(0);
 
   //Hooks
   const lines = useRef<number>(0);
@@ -35,6 +36,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   useEffect(() => {
     currentPiece.current = bag.getNextPiece();
     nextPiece.current = bag.getNextPiece();
+    setNextPieceFlag((prev) => prev + 1);
   }, []);
 
   useEffect(() => {
@@ -72,6 +74,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
     bag.fillBag();
     currentPiece.current = bag.getNextPiece();
     nextPiece.current = bag.getNextPiece();
+    setNextPieceFlag((prev) => prev + 1);
     level.current = 0;
     lines.current = 0;
     setScore(0);
@@ -107,6 +110,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const getNextPiece = () => {
     currentPiece.current = nextPiece.current;
     nextPiece.current = bag.getNextPiece();
+    setNextPieceFlag((prev) => prev + 1);
   };
 
   return (
@@ -128,6 +132,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         audio,
         nextPiece,
         getNextPiece,
+        nextPieceFlag,
       }}
     >
       {props.children}
