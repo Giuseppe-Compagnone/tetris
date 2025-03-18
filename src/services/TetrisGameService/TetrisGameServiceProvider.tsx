@@ -5,6 +5,7 @@ import { TetrisGameServiceProviderProps } from "./TetrisGameService.types";
 import { TetrisGameServiceContext } from "./TetrisGameServiceContext";
 import { Board } from "@/Models/Board";
 import { Piece } from "@/Models/Piece";
+import { Bag } from "@/Models/Bag";
 
 const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   //States
@@ -14,19 +15,26 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const [board, setBoard] = useState<Board>(new Board());
   const [time, setTime] = useState<number>(0);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [bag] = useState<Bag>(new Bag());
 
   //Hooks
   const lines = useRef<number>(0);
   const level = useRef<number>(0);
-  const currentPiece = useRef<Piece>(new Piece());
+  const currentPiece = useRef<Piece>(new Piece(1));
+  const nextPiece = useRef<Piece>(new Piece(1));
 
   //Effects
   useEffect(() => {
     const soundtrack = new Audio("./assets/soundtrack.mp3");
     soundtrack.load();
     soundtrack.loop = true;
-    soundtrack.volume = 1;
+    soundtrack.volume = 0;
     setAudio(soundtrack);
+  }, []);
+
+  useEffect(() => {
+    currentPiece.current = bag.getNextPiece();
+    nextPiece.current = bag.getNextPiece();
   }, []);
 
   useEffect(() => {
@@ -51,7 +59,6 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         }
       }, 1000);
     }
-
     return () => {
       // @ts-expect-error not assigned
       clearInterval(timer);
@@ -62,7 +69,9 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
   const restartGame = () => {
     if (audio) audio.currentTime = 0;
     setBoard(new Board());
-    currentPiece.current = new Piece();
+    bag.fillBag();
+    currentPiece.current = bag.getNextPiece();
+    nextPiece.current = bag.getNextPiece();
     level.current = 0;
     lines.current = 0;
     setScore(0);
@@ -95,6 +104,15 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
     setScore((prev) => prev + newScore);
   };
 
+  const getNextPiece = () => {
+    currentPiece.current = nextPiece.current;
+    nextPiece.current = bag.getNextPiece();
+    console.table({
+      currentPiece: currentPiece.current,
+      nextPiece: nextPiece.current,
+    });
+  };
+
   return (
     <TetrisGameServiceContext.Provider
       value={{
@@ -112,6 +130,8 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
         time,
         currentPiece,
         audio,
+        nextPiece,
+        getNextPiece,
       }}
     >
       {props.children}

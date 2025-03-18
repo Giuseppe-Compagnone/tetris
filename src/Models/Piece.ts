@@ -8,18 +8,17 @@ export class Piece {
   public x: number;
   public y: number;
   public enableControls: boolean;
+  public configuration: number;
 
-  constructor() {
+  constructor(conf: number) {
     this.x = 3;
     this.y = -3;
     this._matrix = new Matrix(4, 4);
     this.direction = 0;
     this.enableControls = true;
+    this.configuration = conf;
 
-    const configuration =
-      PiecesConfigurations[
-        Math.floor(Math.random() * PiecesConfigurations.length)
-      ];
+    const configuration = PiecesConfigurations[conf];
     this._matrix.setMatrix(configuration.configuration);
     this.color = configuration.color;
   }

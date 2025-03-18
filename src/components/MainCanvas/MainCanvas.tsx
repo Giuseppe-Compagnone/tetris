@@ -2,7 +2,6 @@
 
 import appConfig from "@/appConfig";
 import { Board } from "@/Models/Board";
-import { Piece } from "@/Models/Piece";
 import { useTetrisGameService } from "@/services";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,6 +28,7 @@ const MainCanvas = () => {
     gameOver,
     restartGame,
     currentPiece,
+    getNextPiece,
   } = useTetrisGameService();
   const boardRef = useRef<Board>(board);
 
@@ -198,7 +198,8 @@ const MainCanvas = () => {
         setPause(true);
       }
       lines = boardRef.current.clearRows();
-      currentPiece.current = new Piece();
+
+      getNextPiece();
     }
 
     const pieceCollide = boardRef.current.pieceCollide(currentPiece.current);
@@ -216,7 +217,8 @@ const MainCanvas = () => {
           setPause(true);
         }
         lines = boardRef.current.clearRows();
-        currentPiece.current = new Piece();
+
+        getNextPiece();
       }
     }
 

@@ -19,6 +19,8 @@ export interface TetrisGameServiceContent {
   time: number;
   currentPiece: RefObject<Piece>;
   audio: HTMLAudioElement | null;
+  nextPiece: RefObject<Piece>;
+  getNextPiece: () => void;
 }
 
 export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
@@ -35,7 +37,9 @@ export const TetrisGameServiceContext = createContext<TetrisGameServiceContent>(
     restartGame: () => {},
     addLines: () => {},
     time: 0,
-    currentPiece: { current: new Piece() },
+    currentPiece: { current: new Piece(1) },
     audio: null,
+    nextPiece: { current: new Piece(1) },
+    getNextPiece: () => {},
   }
 );

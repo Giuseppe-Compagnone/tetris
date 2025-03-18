@@ -6,7 +6,7 @@ export class Board {
 
   constructor() {
     this._matrix = new Matrix(20, 10);
-    this.projection = new Piece();
+    this.projection = new Piece(1);
   }
 
   public merge = (piece: Piece): void => {
@@ -36,11 +36,10 @@ export class Board {
     piece: Piece,
     ctx: CanvasRenderingContext2D
   ): void => {
-    const clone: Piece = new Piece();
+    const clone: Piece = new Piece(piece.configuration);
     clone.setMatrix = piece.getMatrix;
     clone.x = piece.x;
     clone.y = piece.y;
-    clone.color = piece.color;
 
     while (
       !clone.collideBottom() &&
