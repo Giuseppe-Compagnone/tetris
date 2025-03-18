@@ -18,7 +18,6 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "lodash": "^4.17.21",
     "next": "15.2.2",
-    "next-sass": "^1.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.85.1",
