@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tetris
 
-## Getting Started
+# Tetris Game
 
-First, run the development server:
+A fully immersive Tetris game built with **Next.js**, **SCSS**, and **HTML Canvas**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎮 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Classic Tetris gameplay** with faithful mechanics
+- **Score tracking** to challenge yourself and friends
+- **Next piece preview** to plan your moves
+- **Ghost piece projection** for better precision
+- **Responsive keyboard controls** for a smooth experience
+- **Pause and resume function** for uninterrupted play
+- **Original Tetris music** for a nostalgic touch
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js** – For game logic and rendering
+- **SCSS** – For a modern and clean interface design
+- **HTML Canvas** – For rendering the grid and pieces
 
-## Learn More
+## 🎮 Controls
 
-To learn more about Next.js, take a look at the following resources:
+- **← (Left Arrow)** – Move the piece left
+- **→ (Right Arrow)** – Move the piece right
+- **↓ (Down Arrow)** – Speed up the piece's descent
+- **↑ (Up Arrow)** – Rotate the piece
+- **Spacebar** – Instantly drop the piece
+- **P** – Pause/Resume the game
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📷 Screenshot
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Tetris Game
 
-## Deploy on Vercel
+A fully-featured Tetris game built with **Next.js** , **SCSS** , and **HTML Canvas** .
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎮 Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Classic Tetris gameplay
+- Score tracking
+- Next piece preview
+- Keyboard controls
+- Pause and resume functionality
+
+## 🚀 Tech Stack
+
+- **Next.js** – For rendering and managing the game logic
+- **SCSS** – For styling the game interface
+- **HTML Canvas** – For rendering the game board and pieces
+
+## 🎮 Controls
+
+- **Left Arrow (←)** – Move piece left
+- **Right Arrow (→)** – Move piece right
+- **Down Arrow (↓)** – Move piece down faster
+- **Up Arrow (↑)** – Rotate piece
+- **Spacebar** – Drop piece instantly
+- **P** – Pause/Resume the game
+
+## 📷 Screenshots
+
+![Start](.github/images/screenshots/start.png)
+
+![Start](.github/images/screenshots/game.png)
+
+![Start](.github/images/screenshots/game-over.png)
