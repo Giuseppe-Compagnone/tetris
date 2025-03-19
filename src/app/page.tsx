@@ -16,34 +16,7 @@ import {
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Metadata } from "next";
 import { useEffect, useRef } from "react";
-
-const tags = {
-  title: "Tetris Game",
-  description:
-    "Play the classic Tetris game online for free! Enjoy endless fun with smooth controls, increasing difficulty, and a retro design. No downloads, just pure Tetris action!",
-  image: "./meta/tetris.png",
-  url: "https://giuseppe-compagnone.github.io/tetris/",
-  icon: "",
-};
-
-// export const metadata: Metadata = {
-//   title: tags.title,
-//   description: tags.description,
-//   icons: [tags.icon],
-//   openGraph: {
-//     title: tags.title,
-//     description: tags.description,
-//     images: [tags.image],
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     title: tags.title,
-//     description: tags.description,
-//     images: [tags.image],
-//   },
-// };
 
 const HomePage = () => {
   //Hooks
