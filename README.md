@@ -1,5 +1,3 @@
-# tetris
-
 # Tetris Game
 
 A fully immersive Tetris game built with **Next.js**, **SCSS**, and **HTML Canvas**.
@@ -28,6 +26,10 @@ A fully immersive Tetris game built with **Next.js**, **SCSS**, and **HTML Canva
 - **↑ (Up Arrow)** – Rotate the piece
 - **Spacebar** – Instantly drop the piece
 - **P** – Pause/Resume the game
+
+## 🎮 Play the Demo
+
+Try the game here: [Tetris Demo](https://giuseppe-compagnone.github.io/tetris/)
 
 ## 📷 Screenshot
 
