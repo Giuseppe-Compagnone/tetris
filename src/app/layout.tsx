@@ -7,7 +7,7 @@ const tags = {
     "Play the classic Tetris game online for free! Enjoy endless fun with smooth controls, increasing difficulty, and a retro design. No downloads, just pure Tetris action!",
   image: "./meta/game.png",
   url: "https://giuseppe-compagnone.github.io/tetris/",
-  icon: "",
+  icon: "./meta/favicon.png",
 };
 
 export default function RootLayout({
@@ -28,6 +28,7 @@ export default function RootLayout({
         <meta name="twitter:title" content={tags.title} />
         <meta name="twitter:description" content={tags.description} />
         <meta name="twitter:image" content={tags.image} />
+        <link rel="icon" href={tags.icon} />
       </head>
       <body>
         <ProvidersWrapper>{children}</ProvidersWrapper>
