@@ -29,7 +29,7 @@ const TetrisGameServiceProvider = (props: TetrisGameServiceProviderProps) => {
     const soundtrack = new Audio("./assets/soundtrack.mp3");
     soundtrack.load();
     soundtrack.loop = true;
-    soundtrack.volume = 0;
+    soundtrack.volume = 0.5;
     setAudio(soundtrack);
   }, []);
 
